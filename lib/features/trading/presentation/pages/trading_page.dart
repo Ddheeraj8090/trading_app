@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trading_app/core/utils/drawables/images.dart';
@@ -338,52 +339,80 @@ class _TradingPageState extends State<TradingPage>
   }
 
   Widget _buildBottomNav() {
-    return Container(
-      height: 75.h,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.primary, AppColors.darkPurple],
+    return CurvedNavigationBar(
+      index: _selectedBottomNav,
+      height: 75, // IMPORTANT (no .h)
+      backgroundColor: Colors.transparent,
+      color: AppColors.primary,
+      buttonBackgroundColor: AppColors.darkPurple,
+      animationDuration: const Duration(milliseconds: 400),
+      onTap: (index) {
+        setState(() {
+          _selectedBottomNav = index;
+        });
+      },
+      items: [
+        _navItem(Icons.favorite_border, "My Favorites", 0),
+        _navItem(Icons.receipt_long, "Order", 1),
+        _navItem(Icons.work_outline, "Watchlist", 2),
+        _navItem(Icons.work_outline, "Positions", 3),
+        _navItem(Icons.account_balance_wallet, "Wallet", 4),
+      ],
+    );
+
+  }
+
+  Widget _navItem(IconData icon, String label, int index) {
+    final isSelected = _selectedBottomNav == index;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        if (isSelected)
+          Container(
+            height: 50,
+            width: 50,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF436EDD),
+                  Color(0xFFAF7CE3),
+                  Color(0xFFAF69C7),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Icon(
+              icon,
+              color: Colors.white,
+              size: 26,
+            ),
+          )
+        else
+          Icon(
+            icon,
+            color: Colors.white70,
+            size: 24,
+          ),
+
+        const SizedBox(height: 6),
+
+        Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.white70,
+            fontSize: 12,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+          ),
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildBottomNavItem(Icons.favorite_border, 'My Favorites', 0),
-          _buildBottomNavItem(Icons.receipt_long, 'Order', 1),
-          _buildBottomNavCenter(),
-          _buildBottomNavItem(Icons.work_outline, 'Positions', 3),
-          _buildBottomNavItem(Icons.account_balance_wallet, 'Wallet', 4),
-        ],
-      ),
+      ],
     );
   }
 
-  Widget _buildBottomNavItem(IconData icon, String label, int index) {
-    final isSelected = _selectedBottomNav == index;
-    return GestureDetector(
-      onTap: () => setState(() => _selectedBottomNav = index),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: AppColors.white.withOpacity(isSelected ? 1.0 : 0.7),
-            size: 24.w,
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 11.sp,
-              color: AppColors.white.withOpacity(isSelected ? 1.0 : 0.7),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   Widget _buildBottomNavCenter() {
     return Container(
