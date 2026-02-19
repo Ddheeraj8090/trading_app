@@ -5,6 +5,7 @@ import '../../domain/repositories/trading_repository.dart';
 import '../models/trading_asset_model.dart';
 
 class TradingRepositoryImpl implements TradingRepository {
+  /// this is static data
   final Map<String, _AssetData> _assets = {
     'AXIS': _AssetData('AXIS', 'AXIS Bank', 3426.03),
     'HDFC': _AssetData('HDFC', 'HDFC Bank', 3428.03),

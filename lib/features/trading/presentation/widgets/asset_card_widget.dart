@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/drawables/icons.dart';
+import '../../../../core/utils/fonts/font_family.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/utils/size_config.dart';
 import '../../domain/entities/trading_asset.dart';
@@ -45,9 +46,10 @@ class AssetCardWidget extends StatelessWidget {
                         child: Text(
                           '${asset.symbol} - $contractMonth',
                           style: TextStyle(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 14.sp,
                             color: AppColors.textColor,
+                            fontWeight: FontStyles.regular,
+                            fontFamily: FontFamily.roboto,
                           ),
                         ),
                       ),
@@ -58,8 +60,10 @@ class AssetCardWidget extends StatelessWidget {
                     child: Text(
                       tradeDate,
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 11.sp,
                         color: AppColors.textGrey,
+                        fontWeight: FontStyles.semiBold,
+                        fontFamily: FontFamily.roboto,
                       ),
                     ),
                   ),
@@ -68,7 +72,7 @@ class AssetCardWidget extends StatelessWidget {
                     children: [
                       SvgPicture.asset(
                         asset.isUp ? AppIcons.svgUp : AppIcons.svgDown,
-                        height: 14.h,
+                        height: 8.h,
                         width: 14.w,
                       ),
                       SizedBox(width: 4.w),
@@ -77,7 +81,8 @@ class AssetCardWidget extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12.sp,
                           color: trendColor,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontStyles.regular,
+                          fontFamily: FontFamily.roboto,
                         ),
                       ),
                       SizedBox(width: 8.w),
@@ -109,8 +114,10 @@ class AssetCardWidget extends StatelessWidget {
                             Text(
                               'Chart',
                               style: TextStyle(
-                                fontSize: 10.sp,
-                                color: AppColors.textGrey,
+                                fontSize: 12.sp,
+                                color: AppColors.chartTextColor,
+                                fontWeight: FontStyles.regular,
+                                fontFamily: FontFamily.roboto,
                               ),
                             ),
                           ],
@@ -122,11 +129,7 @@ class AssetCardWidget extends StatelessWidget {
               ),
             ),
             SizedBox(width: 10.w),
-            _buildPriceCard(
-              'Sell',
-              Formatters.formatPrice(asset.price * 0.98),
-              false,
-            ),
+            _buildPriceCard('Sell', Formatters.formatPrice(asset.price), false),
             SizedBox(width: 10.w),
             _buildPriceCard('Buy', Formatters.formatPrice(asset.price), true),
           ],
@@ -153,17 +156,27 @@ class AssetCardWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 13.sp, color: AppColors.darkPurple),
+          Center(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: AppColors.darkPurple,
+                fontWeight: FontStyles.regular,
+                fontFamily: FontFamily.roboto,
+              ),
+            ),
           ),
           SizedBox(height: 4.h),
-          Text(
-            price,
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.bold,
-              color: isBuy ? AppColors.blue : AppColors.error,
+          Center(
+            child: Text(
+              price,
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: isBuy ? AppColors.blue : AppColors.error,
+                fontWeight: FontStyles.regular,
+                fontFamily: FontFamily.roboto,
+              ),
             ),
           ),
         ],
@@ -269,9 +282,5 @@ class _BadgeConfig {
   final List<Color> colors;
   final String? logoUrl;
 
-  const _BadgeConfig({
-    required this.label,
-    required this.colors,
-    this.logoUrl,
-  });
+  const _BadgeConfig({required this.label, required this.colors, this.logoUrl});
 }

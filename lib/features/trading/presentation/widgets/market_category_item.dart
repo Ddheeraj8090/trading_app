@@ -31,8 +31,8 @@ class MarketCategoryItem extends StatelessWidget {
             style: TextStyle(
               fontSize: isSelected ? 12.sp : 11.sp,
               color: isSelected ? AppColors.textColor : AppColors.textGrey,
-              fontWeight: isSelected ? FontStyles.medium : FontStyles.regular,
-              fontFamily: FontFamily.poppins,
+              fontWeight: isSelected ? FontStyles.semiBold : FontStyles.regular,
+              fontFamily: FontFamily.roboto,
               letterSpacing: 1.0,
             ),
           ),

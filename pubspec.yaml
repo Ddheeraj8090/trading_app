@@ -37,3 +37,12 @@ flutter:
         - asset: assets/fonts/poppins/Poppins-Medium.ttf
         - asset: assets/fonts/poppins/Poppins-Regular.ttf
         - asset: assets/fonts/poppins/Poppins-SemiBold.ttf
+
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Black.ttf
+        - asset: assets/fonts/roboto/Roboto-Bold.ttf
+        - asset: assets/fonts/roboto/Roboto-Light.ttf
+        - asset: assets/fonts/roboto/Roboto-Medium.ttf
+        - asset: assets/fonts/roboto/Roboto-Regular.ttf
+        - asset: assets/fonts/roboto/Roboto-SemiBold.ttf

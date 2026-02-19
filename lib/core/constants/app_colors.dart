@@ -18,6 +18,7 @@ class AppColors {
 
   static const textColor = Color(0xFF222222);
   static const textGrey = Color(0xFF747474);
+  static const chartTextColor = Color(0xFFAC876C);
   static const textLight = Color(0xFFA0A0A0);
 
   static const border = Color(0xFFE0E0E0);

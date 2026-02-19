@@ -126,8 +126,8 @@ class TradingPage extends StatelessWidget {
                             '122200',
                             style: TextStyle(
                               fontSize: 18.sp,
-                              fontWeight: FontStyles.medium,
-                              fontFamily: FontFamily.poppins,
+                              fontWeight: FontStyles.semiBold,
+                              fontFamily: FontFamily.roboto,
                               foreground: Paint()
                                 ..shader = const LinearGradient(
                                   colors: [
@@ -182,7 +182,8 @@ class TradingPage extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10.sp,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontStyles.semiBold,
+                              fontFamily: FontFamily.roboto,
                               height: 1,
                             ),
                           ),
@@ -294,7 +295,12 @@ class TradingPage extends StatelessWidget {
         },
         decoration: InputDecoration(
           hintText: 'Search Nse Futures',
-          hintStyle: TextStyle(color: AppColors.textLight, fontSize: 14.sp),
+          hintStyle: TextStyle(
+            color: AppColors.textLight,
+            fontSize: 14.sp,
+            fontWeight: FontStyles.regular,
+            fontFamily: FontFamily.roboto,
+          ),
           prefixIcon: Icon(Icons.search, color: AppColors.textGrey, size: 20.w),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(
@@ -311,11 +317,12 @@ class TradingPage extends StatelessWidget {
       if (state.assets.isEmpty) {
         return Center(
           child: Text(
-            'No assets found',
+            'No Data found',
             style: TextStyle(
               fontSize: 14.sp,
               color: AppColors.textGrey,
-              fontFamily: FontFamily.poppins,
+              fontWeight: FontStyles.semiBold,
+              fontFamily: FontFamily.roboto,
             ),
           ),
         );
@@ -330,17 +337,13 @@ class TradingPage extends StatelessWidget {
             children: [
               AssetCardWidget(
                 asset: asset,
-                bottomMargin:0,
+                bottomMargin: 0,
                 onTap: () {
-                  context.read<TradingBloc>().add(SelectAsset(asset.symbol));
+                  /// hand on click
                 },
               ),
               if (index != state.assets.length - 1)
-                Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: AppColors.border,
-                ),
+                Divider(height: 1, thickness: 1, color: AppColors.border),
             ],
           );
         },
@@ -357,7 +360,7 @@ class TradingPage extends StatelessWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        systemNavigationBarColor: Color(0xFF4A419C),
+        systemNavigationBarColor: Color(0xFF6768E1),
         systemNavigationBarIconBrightness: Brightness.light,
         systemNavigationBarDividerColor: Colors.transparent,
       ),
@@ -367,7 +370,7 @@ class TradingPage extends StatelessWidget {
           index: selectedBottomNav,
           height: 88,
           backgroundColor: Colors.transparent,
-          color: const Color(0xFF4A419C),
+          color: const Color(0xFF6768E1),
           gradient: AppColors.footerGradient,
           buttonBackgroundColor: Colors.transparent,
           animationDuration: const Duration(milliseconds: 520),

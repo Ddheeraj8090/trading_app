@@ -5,6 +5,7 @@ class FontFamily {
   FontFamily._();
 
   static const String poppins = 'Poppins';
+  static const String roboto = 'Roboto';
 }
 
 ///For font fontStyles
@@ -12,6 +13,7 @@ class FontStyles {
   FontStyles._();
 
   static const String poppins = 'Poppins';
+  static const String roboto = 'Roboto';
 
   /// w100
   static FontWeight thin = FontWeight.w100;
