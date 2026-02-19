@@ -28,7 +28,7 @@ class AssetListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -53,10 +53,7 @@ class AssetListItem extends StatelessWidget {
                   const SizedBox(height: 4),
                   const Text(
                     '31-07-2025',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textGrey,
-                    ),
+                    style: TextStyle(fontSize: 12, color: AppColors.textGrey),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -77,7 +74,10 @@ class AssetListItem extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.cardGrey,
                           borderRadius: BorderRadius.circular(6),

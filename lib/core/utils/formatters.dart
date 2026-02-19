@@ -20,4 +20,12 @@ class Formatters {
     }
     return number.toStringAsFixed(0);
   }
+
+  static String formatContractMonth(DateTime date) {
+    return DateFormat('MMM yy').format(date).toUpperCase();
+  }
+
+  static String formatTradeDate(DateTime date) {
+    return DateFormat('dd-MM-yyyy').format(date);
+  }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:trading_app/core/utils/size_config.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/utils/fonts/font_family.dart';
@@ -34,7 +33,7 @@ class MarketCategoryItem extends StatelessWidget {
               color: isSelected ? AppColors.textColor : AppColors.textGrey,
               fontWeight: isSelected ? FontStyles.medium : FontStyles.regular,
               fontFamily: FontFamily.poppins,
-              letterSpacing: 1.0
+              letterSpacing: 1.0,
             ),
           ),
           const SizedBox(height: 6),

@@ -21,4 +21,13 @@ class AppColors {
   static const textLight = Color(0xFFA0A0A0);
 
   static const border = Color(0xFFE0E0E0);
+
+  static const Color footerStart = Color(0xFF6768E1);
+  static const Color footerEnd = Color(0xFF4A419C);
+
+  static const LinearGradient footerGradient = LinearGradient(
+    colors: [footerStart, footerEnd],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }

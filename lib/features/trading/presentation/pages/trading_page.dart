@@ -1,6 +1,7 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:trading_app/core/utils/drawables/images.dart';
 import 'package:trading_app/core/utils/fonts/font_family.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -10,51 +11,53 @@ import '../bloc/trading_bloc.dart';
 import '../bloc/trading_event.dart';
 import '../bloc/trading_state.dart';
 import '../widgets/asset_card_widget.dart';
+import '../widgets/bottom_navigation/curved_navigation_bar.dart';
+import '../widgets/bottom_navigation/curved_navigation_bar_item.dart';
 import '../widgets/market_category_item.dart';
 
-class TradingPage extends StatefulWidget {
+class TradingPage extends StatelessWidget {
   const TradingPage({super.key});
 
-  @override
-  State<TradingPage> createState() => _TradingPageState();
-}
+  static const List<String> _tabs = [
+    'NSE FUTURES',
+    'NSE OPTION',
+    'MCX FUTURES',
+    'MCX OPTIONS',
+  ];
 
-class _TradingPageState extends State<TradingPage>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  int _selectedCategory = 0;
-  int _selectedBottomNav = 2;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+  static const List<_CategoryConfig> _categories = [
+    _CategoryConfig(icon: AppImages.indianMarket, label: 'Indian Market'),
+    _CategoryConfig(icon: AppImages.international, label: 'International'),
+    _CategoryConfig(icon: AppImages.forexFutures, label: 'Forex Futures'),
+    _CategoryConfig(icon: AppImages.cryptoFutures, label: 'Crypto Futures'),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Column(
-        children: [
-          _buildHeader(),
-          _buildTabBar(),
-          _buildSearchBar(),
-          SizedBox(height: 10.h,),
-          Expanded(child: _buildAssetList()),
-        ],
-      ),
-      bottomNavigationBar: _buildBottomNav(),
+    return BlocBuilder<TradingBloc, TradingState>(
+      builder: (context, state) {
+        final loadedState = state is TradingLoaded ? state : null;
+        final selectedCategoryIndex = loadedState?.selectedCategoryIndex ?? 0;
+        final selectedTabIndex = loadedState?.selectedTabIndex ?? 0;
+
+        return Scaffold(
+          backgroundColor: AppColors.background,
+          body: Column(
+            children: [
+              _buildHeader(context, selectedCategoryIndex),
+              _buildTabBar(context, selectedTabIndex),
+              _buildSearchBar(context),
+              SizedBox(height: 10.h),
+              Expanded(child: _buildAssetList(context, state)),
+            ],
+          ),
+          bottomNavigationBar: _buildBottomNav(context, loadedState),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context, int selectedCategoryIndex) {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -102,10 +105,10 @@ class _TradingPageState extends State<TradingPage>
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(9.r),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
-                            color: const Color(0xFFC28FEA),
-                            offset: const Offset(0, 4),
+                            color: Color(0xFFC28FEA),
+                            offset: Offset(0, 4),
                             blurRadius: 1,
                             spreadRadius: 0,
                           ),
@@ -119,9 +122,8 @@ class _TradingPageState extends State<TradingPage>
                             width: 21.w,
                           ),
                           SizedBox(width: 5.w),
-                          /// Amount Text
                           Text(
-                            "122200",
+                            '122200',
                             style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontStyles.medium,
@@ -143,15 +145,10 @@ class _TradingPageState extends State<TradingPage>
                   Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.notifications,
-                            size: 30.w,
-                            color: const Color(0xFF1A1A1A),
-                          ),
-                        ],
+                      Icon(
+                        Icons.notifications,
+                        size: 30.w,
+                        color: const Color(0xFF1A1A1A),
                       ),
                       Positioned(
                         top: -6,
@@ -164,13 +161,10 @@ class _TradingPageState extends State<TradingPage>
                             gradient: const LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: [
-                                Color(0xFFA71212),
-                                Color(0xFFFF0000),
-                              ],
+                              colors: [Color(0xFFA71212), Color(0xFFFF0000)],
                             ),
                             border: Border.all(
-                              color: Color(0xFFDFC5EC),
+                              color: const Color(0xFFDFC5EC),
                               width: 1.4,
                             ),
                             boxShadow: const [
@@ -184,7 +178,7 @@ class _TradingPageState extends State<TradingPage>
                           ),
                           alignment: Alignment.center,
                           child: Text(
-                            "10",
+                            '10',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10.sp,
@@ -201,32 +195,17 @@ class _TradingPageState extends State<TradingPage>
               SizedBox(height: 20.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MarketCategoryItem(
-                    icon: AppImages.indianMarket,
-                    label: 'Indian Market',
-                    isSelected: _selectedCategory == 0,
-                    onTap: () => setState(() => _selectedCategory = 0),
-                  ),
-                  MarketCategoryItem(
-                    icon: AppImages.international,
-                    label: 'International',
-                    isSelected: _selectedCategory == 1,
-                    onTap: () => setState(() => _selectedCategory = 1),
-                  ),
-                  MarketCategoryItem(
-                    icon: AppImages.forexFutures,
-                    label: 'Forex Futures',
-                    isSelected: _selectedCategory == 2,
-                    onTap: () => setState(() => _selectedCategory = 2),
-                  ),
-                  MarketCategoryItem(
-                    icon: AppImages.cryptoFutures,
-                    label: 'Crypto Futures',
-                    isSelected: _selectedCategory == 3,
-                    onTap: () => setState(() => _selectedCategory = 3),
-                  ),
-                ],
+                children: List.generate(_categories.length, (index) {
+                  final category = _categories[index];
+                  return MarketCategoryItem(
+                    icon: category.icon,
+                    label: category.label,
+                    isSelected: selectedCategoryIndex == index,
+                    onTap: () {
+                      context.read<TradingBloc>().add(CategoryChanged(index));
+                    },
+                  );
+                }),
               ),
             ],
           ),
@@ -235,59 +214,70 @@ class _TradingPageState extends State<TradingPage>
     );
   }
 
-  Widget _buildTabBar() {
+  Widget _buildTabBar(BuildContext context, int selectedTabIndex) {
     return Container(
       color: AppColors.background,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      child: TabBar(
-        controller: _tabController,
-        isScrollable: true,
-        indicator: const BoxDecoration(),
-        labelPadding: EdgeInsets.symmetric(horizontal: 8.w),
-        dividerColor: Colors.transparent,
-        tabs: [
-          _buildTab('NSE FUTURES', 0),
-          _buildTab('NSE OPTION', 1),
-          _buildTab('MCX FUTURES', 2),
-          _buildTab('MCX OPTIONS', 3),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTab(String text, int index) {
-    final isSelected = _tabController.index == index;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6.r),
-        gradient: isSelected
-            ? const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF436EDD),
-            Color(0xFFAF7CE3),
-            Color(0xFFAF69C7),
-          ],
-        )
-            : null,
-        color: isSelected ? null : Colors.transparent,
-      ),
-
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 13.sp,
-          fontWeight: FontWeight.w500,
-          color: isSelected ? AppColors.white : AppColors.textGrey,
-          fontFamily: FontFamily.poppins,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(
+            _tabs.length,
+            (index) => Padding(
+              padding: EdgeInsets.only(right: 8.w),
+              child: _buildTab(
+                context: context,
+                text: _tabs[index],
+                isSelected: selectedTabIndex == index,
+                onTap: () {
+                  context.read<TradingBloc>().add(TabChanged(index));
+                },
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildTab({
+    required BuildContext context,
+    required String text,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6.r),
+          gradient: isSelected
+              ? const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF436EDD),
+                    Color(0xFFAF7CE3),
+                    Color(0xFFAF69C7),
+                  ],
+                )
+              : null,
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 13.sp,
+            fontWeight: FontWeight.w500,
+            color: isSelected ? AppColors.white : AppColors.textGrey,
+            fontFamily: FontFamily.poppins,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchBar(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w),
       height: 45.h,
@@ -295,10 +285,13 @@ class _TradingPageState extends State<TradingPage>
         color: AppColors.white,
         borderRadius: BorderRadius.circular(10.r),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4),
         ],
       ),
       child: TextField(
+        onChanged: (value) {
+          context.read<TradingBloc>().add(SearchQueryChanged(value));
+        },
         decoration: InputDecoration(
           hintText: 'Search Nse Futures',
           hintStyle: TextStyle(color: AppColors.textLight, fontSize: 14.sp),
@@ -313,139 +306,148 @@ class _TradingPageState extends State<TradingPage>
     );
   }
 
-  Widget _buildAssetList() {
-    return BlocBuilder<TradingBloc, TradingState>(
-      builder: (context, state) {
-        if (state is TradingLoaded) {
-          return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            itemCount: state.assets.length,
-            itemBuilder: (context, index) {
-              final asset = state.assets[index];
-              return AssetCardWidget(
+  Widget _buildAssetList(BuildContext context, TradingState state) {
+    if (state is TradingLoaded) {
+      if (state.assets.isEmpty) {
+        return Center(
+          child: Text(
+            'No assets found',
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: AppColors.textGrey,
+              fontFamily: FontFamily.poppins,
+            ),
+          ),
+        );
+      }
+
+      return ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        itemCount: state.assets.length,
+        itemBuilder: (context, index) {
+          final asset = state.assets[index];
+          return Column(
+            children: [
+              AssetCardWidget(
                 asset: asset,
+                bottomMargin:0,
                 onTap: () {
                   context.read<TradingBloc>().add(SelectAsset(asset.symbol));
                 },
-              );
-            },
-          );
-        }
-        return const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
-        );
-      },
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return CurvedNavigationBar(
-      index: _selectedBottomNav,
-      height: 75, // IMPORTANT (no .h)
-      backgroundColor: Colors.transparent,
-      color: AppColors.primary,
-      buttonBackgroundColor: AppColors.darkPurple,
-      animationDuration: const Duration(milliseconds: 400),
-      onTap: (index) {
-        setState(() {
-          _selectedBottomNav = index;
-        });
-      },
-      items: [
-        _navItem(Icons.favorite_border, "My Favorites", 0),
-        _navItem(Icons.receipt_long, "Order", 1),
-        _navItem(Icons.work_outline, "Watchlist", 2),
-        _navItem(Icons.work_outline, "Positions", 3),
-        _navItem(Icons.account_balance_wallet, "Wallet", 4),
-      ],
-    );
-
-  }
-
-  Widget _navItem(IconData icon, String label, int index) {
-    final isSelected = _selectedBottomNav == index;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        if (isSelected)
-          Container(
-            height: 50,
-            width: 50,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF436EDD),
-                  Color(0xFFAF7CE3),
-                  Color(0xFFAF69C7),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
               ),
-            ),
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 26,
-            ),
-          )
-        else
-          Icon(
-            icon,
-            color: Colors.white70,
-            size: 24,
-          ),
+              if (index != state.assets.length - 1)
+                Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: AppColors.border,
+                ),
+            ],
+          );
+        },
+      );
+    }
 
-        const SizedBox(height: 6),
-
-        Text(
-          label,
-          style: TextStyle(
-            color: isSelected ? Colors.white : Colors.white70,
-            fontSize: 12,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-          ),
-        ),
-      ],
+    return const Center(
+      child: CircularProgressIndicator(color: AppColors.primary),
     );
   }
 
+  Widget _buildBottomNav(BuildContext context, TradingLoaded? state) {
+    final selectedBottomNav = state?.selectedBottomNavIndex ?? 2;
 
-
-  Widget _buildBottomNavCenter() {
-    return Container(
-      width: 60.w,
-      height: 60.h,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: const LinearGradient(
-          colors: [AppColors.primary, AppColors.darkPurple],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withOpacity(0.4),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: Color(0xFF4A419C),
+        systemNavigationBarIconBrightness: Brightness.light,
+        systemNavigationBarDividerColor: Colors.transparent,
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.remove_red_eye, color: AppColors.white, size: 26.w),
-          SizedBox(height: 2.h),
-          Text(
-            'Watchlist',
-            style: TextStyle(
-              fontSize: 9.sp,
-              color: AppColors.white,
-              fontWeight: FontWeight.w500,
+      child: SafeArea(
+        top: false,
+        child: CurvedNavigationBar(
+          index: selectedBottomNav,
+          height: 88,
+          backgroundColor: Colors.transparent,
+          color: const Color(0xFF4A419C),
+          gradient: AppColors.footerGradient,
+          buttonBackgroundColor: Colors.transparent,
+          animationDuration: const Duration(milliseconds: 520),
+          animationCurve: Curves.easeInOutCubicEmphasized,
+          iconPadding: 0,
+          maxWidth: double.infinity,
+          onTap: (index) {
+            context.read<TradingBloc>().add(BottomNavChanged(index));
+          },
+          items: [
+            _navItem(
+              AppIcons.myFavorites,
+              'My Favorites',
+              0,
+              selectedBottomNav,
             ),
-          ),
-        ],
+            _navItem(AppIcons.order, 'Order', 1, selectedBottomNav),
+            _navItem(AppIcons.order, 'Watchlist', 2, selectedBottomNav),
+            _navItem(AppIcons.positions, 'Positions', 3, selectedBottomNav),
+            _navItem(AppIcons.wallet, 'Wallet', 4, selectedBottomNav),
+          ],
+        ),
       ),
     );
   }
+
+  CurvedNavigationBarItem _navItem(
+    String iconPath,
+    String label,
+    int index,
+    int selectedBottomNav,
+  ) {
+    final isSelected = selectedBottomNav == index;
+
+    return CurvedNavigationBarItem(
+      child: isSelected
+          ? Container(
+              height: 50,
+              width: 50,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF436EDD),
+                    Color(0xFFAF7CE3),
+                    Color(0xFFAF69C7),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+            )
+          : Column(
+              children: [
+                const SizedBox(height: 25),
+                SvgPicture.asset(
+                  iconPath,
+                  height: 20,
+                  width: 20,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white70,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ],
+            ),
+      label: label,
+      labelStyle: TextStyle(
+        color: isSelected ? Colors.white : Colors.white70,
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        fontFamily: FontFamily.poppins,
+      ),
+    );
+  }
+}
+
+class _CategoryConfig {
+  final String icon;
+  final String label;
+
+  const _CategoryConfig({required this.icon, required this.label});
 }
