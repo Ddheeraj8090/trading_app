@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -369,7 +371,7 @@ class TradingPage extends StatelessWidget {
           buttonBackgroundColor: Colors.transparent,
           animationDuration: const Duration(milliseconds: 520),
           animationCurve: Curves.easeInOutCubicEmphasized,
-          iconPadding: 0,
+          iconPadding: Platform.isIOS?10: 0,
           maxWidth: double.infinity,
           onTap: (index) {
             context.read<TradingBloc>().add(BottomNavChanged(index));
