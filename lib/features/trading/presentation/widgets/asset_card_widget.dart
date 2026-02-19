@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/drawables/icons.dart';
 import '../../../../core/utils/fonts/font_family.dart';
 import '../../../../core/utils/formatters.dart';
@@ -96,7 +97,7 @@ class AssetCardWidget extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4.r),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.12),
+                              color: AppColors.black.withValues(alpha: 0.12),
                               blurRadius: 3,
                               offset: const Offset(0, 1),
                             ),
@@ -112,7 +113,7 @@ class AssetCardWidget extends StatelessWidget {
                             ),
                             SizedBox(width: 4.w),
                             Text(
-                              'Chart',
+                              AppStrings.chart,
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 color: AppColors.chartTextColor,
@@ -129,9 +130,17 @@ class AssetCardWidget extends StatelessWidget {
               ),
             ),
             SizedBox(width: 10.w),
-            _buildPriceCard('Sell', Formatters.formatPrice(asset.price), false),
+            _buildPriceCard(
+              AppStrings.sell,
+              Formatters.formatPrice(asset.price),
+              false,
+            ),
             SizedBox(width: 10.w),
-            _buildPriceCard('Buy', Formatters.formatPrice(asset.price), true),
+            _buildPriceCard(
+              AppStrings.buy,
+              Formatters.formatPrice(asset.price),
+              true,
+            ),
           ],
         ),
       ),
@@ -143,11 +152,11 @@ class AssetCardWidget extends StatelessWidget {
       width: 92.w,
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F8F8),
+        color: AppColors.priceCardBackground,
         borderRadius: BorderRadius.circular(8.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
+            color: AppColors.black.withValues(alpha: 0.15),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -222,7 +231,7 @@ class AssetCardWidget extends StatelessWidget {
       child: Text(
         config.label,
         style: TextStyle(
-          color: Colors.white,
+          color: AppColors.white,
           fontSize: 9.sp,
           fontWeight: FontWeight.w700,
         ),
@@ -232,46 +241,43 @@ class AssetCardWidget extends StatelessWidget {
 
   _BadgeConfig _badgeConfig(String symbol) {
     switch (symbol) {
-      case 'AXIS':
+      case AppStrings.symbolAxis:
         return const _BadgeConfig(
-          label: 'A',
-          colors: [Color(0xFFB11762), Color(0xFFD04E8C)],
-          logoUrl:
-              'https://companieslogo.com/img/orig/AXISBANK.BO-8f59e95b.png?t=1720244490',
+          label: AppStrings.badgeAxis,
+          colors: [AppColors.axisBadgeStart, AppColors.axisBadgeEnd],
+          logoUrl: AppStrings.axisLogoUrl,
         );
-      case 'HDFC':
+      case AppStrings.symbolHdfc:
         return const _BadgeConfig(
-          label: 'H',
-          colors: [Color(0xFF004A9F), Color(0xFF0A72D8)],
-          logoUrl:
-              'https://companieslogo.com/img/orig/HDB-bb6241fe.png?t=1720244492',
+          label: AppStrings.badgeHdfc,
+          colors: [AppColors.hdfcBadgeStart, AppColors.hdfcBadgeEnd],
+          logoUrl: AppStrings.hdfcLogoUrl,
         );
-      case 'SBIN':
+      case AppStrings.symbolSbin:
         return const _BadgeConfig(
-          label: 'S',
-          colors: [Color(0xFF1F6DF0), Color(0xFF4E90FF)],
+          label: AppStrings.badgeSbin,
+          colors: [AppColors.sbinBadgeStart, AppColors.sbinBadgeEnd],
         );
-      case 'ICICI':
+      case AppStrings.symbolIcici:
         return const _BadgeConfig(
-          label: 'I',
-          colors: [Color(0xFF7E2F18), Color(0xFFC1552D)],
-          logoUrl:
-              'https://i.pinimg.com/736x/ff/d5/31/ffd531a6a78464512a97848e14506738.jpg',
+          label: AppStrings.badgeIcici,
+          colors: [AppColors.iciciBadgeStart, AppColors.iciciBadgeEnd],
+          logoUrl: AppStrings.iciciLogoUrl,
         );
-      case 'RELIANCE':
+      case AppStrings.symbolReliance:
         return const _BadgeConfig(
-          label: 'R',
-          colors: [Color(0xFF3A2C9E), Color(0xFF6457D3)],
+          label: AppStrings.badgeReliance,
+          colors: [AppColors.relianceBadgeStart, AppColors.relianceBadgeEnd],
         );
-      case 'INFY':
+      case AppStrings.symbolInfy:
         return const _BadgeConfig(
-          label: 'IN',
-          colors: [Color(0xFF0F8A78), Color(0xFF28B4A0)],
+          label: AppStrings.badgeInfy,
+          colors: [AppColors.infyBadgeStart, AppColors.infyBadgeEnd],
         );
       default:
         return const _BadgeConfig(
-          label: 'M',
-          colors: [Color(0xFF5E5E5E), Color(0xFF8C8C8C)],
+          label: AppStrings.badgeFallback,
+          colors: [AppColors.fallbackBadgeStart, AppColors.fallbackBadgeEnd],
         );
     }
   }

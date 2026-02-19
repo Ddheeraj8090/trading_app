@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../domain/entities/trading_asset.dart';
 import 'price_card_widget.dart';
@@ -28,7 +29,7 @@ class AssetListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: AppColors.black.withValues(alpha: 0.06),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -43,7 +44,7 @@ class AssetListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${asset.symbol} - JULY 25',
+                    '${asset.symbol} - ${AppStrings.assetListContractMonth}',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -52,7 +53,7 @@ class AssetListItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    '31-07-2025',
+                    AppStrings.assetListTradeDate,
                     style: TextStyle(fontSize: 12, color: AppColors.textGrey),
                   ),
                   const SizedBox(height: 8),
@@ -83,7 +84,7 @@ class AssetListItem extends StatelessWidget {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: const Text(
-                          'Chart',
+                          AppStrings.chart,
                           style: TextStyle(
                             fontSize: 10,
                             color: AppColors.textGrey,
@@ -97,13 +98,13 @@ class AssetListItem extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             PriceCard(
-              label: 'Sell',
+              label: AppStrings.sell,
               price: Formatters.formatPrice(asset.price * 0.98),
               isBuy: false,
             ),
             const SizedBox(width: 10),
             PriceCard(
-              label: 'Buy',
+              label: AppStrings.buy,
               price: Formatters.formatPrice(asset.price),
               isBuy: true,
             ),

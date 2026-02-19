@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:trading_app/core/utils/drawables/images.dart';
 import 'package:trading_app/core/utils/fonts/font_family.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/drawables/icons.dart';
 import '../../../../core/utils/size_config.dart';
 import '../bloc/trading_bloc.dart';
@@ -19,17 +20,29 @@ class TradingPage extends StatelessWidget {
   const TradingPage({super.key});
 
   static const List<String> _tabs = [
-    'NSE FUTURES',
-    'NSE OPTION',
-    'MCX FUTURES',
-    'MCX OPTIONS',
+    AppStrings.nseFutures,
+    AppStrings.nseOption,
+    AppStrings.mcxFutures,
+    AppStrings.mcxOptions,
   ];
 
   static const List<_CategoryConfig> _categories = [
-    _CategoryConfig(icon: AppImages.indianMarket, label: 'Indian Market'),
-    _CategoryConfig(icon: AppImages.international, label: 'International'),
-    _CategoryConfig(icon: AppImages.forexFutures, label: 'Forex Futures'),
-    _CategoryConfig(icon: AppImages.cryptoFutures, label: 'Crypto Futures'),
+    _CategoryConfig(
+      icon: AppImages.indianMarket,
+      label: AppStrings.indianMarket,
+    ),
+    _CategoryConfig(
+      icon: AppImages.international,
+      label: AppStrings.international,
+    ),
+    _CategoryConfig(
+      icon: AppImages.forexFutures,
+      label: AppStrings.forexFutures,
+    ),
+    _CategoryConfig(
+      icon: AppImages.cryptoFutures,
+      label: AppStrings.cryptoFutures,
+    ),
   ];
 
   @override
@@ -59,15 +72,7 @@ class TradingPage extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context, int selectedCategoryIndex) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromRGBO(67, 110, 221, 0.4),
-            Color.fromRGBO(175, 124, 227, 0.4),
-            Color.fromRGBO(175, 105, 199, 0.4),
-          ],
-        ),
-      ),
+      decoration: const BoxDecoration(gradient: AppColors.topOverlayGradient),
       child: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -79,7 +84,7 @@ class TradingPage extends StatelessWidget {
                   Icon(Icons.menu, color: AppColors.textColor, size: 24.w),
                   SizedBox(width: 20.w),
                   Text(
-                    'Market Watch',
+                    AppStrings.marketWatch,
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontStyles.medium,
@@ -91,23 +96,17 @@ class TradingPage extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(1.2),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFF436EDD),
-                          Color(0xFFAF7CE3),
-                          Color(0xFFAF69C7),
-                        ],
-                      ),
+                      gradient: AppColors.accentBarGradient,
                       borderRadius: BorderRadius.circular(9.r),
                     ),
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(9.r),
                         boxShadow: const [
                           BoxShadow(
-                            color: Color(0xFFC28FEA),
+                            color: AppColors.shadowPurple,
                             offset: Offset(0, 4),
                             blurRadius: 1,
                             spreadRadius: 0,
@@ -123,7 +122,7 @@ class TradingPage extends StatelessWidget {
                           ),
                           SizedBox(width: 5.w),
                           Text(
-                            '122200',
+                            AppStrings.walletBalance,
                             style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontStyles.semiBold,
@@ -131,8 +130,8 @@ class TradingPage extends StatelessWidget {
                               foreground: Paint()
                                 ..shader = const LinearGradient(
                                   colors: [
-                                    Color(0xFF6768E1),
-                                    Color(0xFF4A419C),
+                                    AppColors.footerStart,
+                                    AppColors.footerEnd,
                                   ],
                                 ).createShader(Rect.fromLTWH(0, 0, 200, 70)),
                             ),
@@ -148,7 +147,7 @@ class TradingPage extends StatelessWidget {
                       Icon(
                         Icons.notifications,
                         size: 30.w,
-                        color: const Color(0xFF1A1A1A),
+                        color: AppColors.black87,
                       ),
                       Positioned(
                         top: -6,
@@ -158,18 +157,14 @@ class TradingPage extends StatelessWidget {
                           height: 22.w,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            gradient: const LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Color(0xFFA71212), Color(0xFFFF0000)],
-                            ),
+                            gradient: AppColors.badgeNotificationGradient,
                             border: Border.all(
-                              color: const Color(0xFFDFC5EC),
+                              color: AppColors.badgeBorder,
                               width: 1.4,
                             ),
                             boxShadow: const [
                               BoxShadow(
-                                color: Color(0xFF6D0404),
+                                color: AppColors.badgeShadow,
                                 offset: Offset(0, 2),
                                 blurRadius: 0,
                                 spreadRadius: 0,
@@ -178,9 +173,9 @@ class TradingPage extends StatelessWidget {
                           ),
                           alignment: Alignment.center,
                           child: Text(
-                            '10',
+                            AppStrings.notificationCount,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontSize: 10.sp,
                               fontWeight: FontStyles.semiBold,
                               fontFamily: FontFamily.roboto,
@@ -253,17 +248,7 @@ class TradingPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6.r),
-          gradient: isSelected
-              ? const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF436EDD),
-                    Color(0xFFAF7CE3),
-                    Color(0xFFAF69C7),
-                  ],
-                )
-              : null,
+          gradient: isSelected ? AppColors.accentGradient : null,
         ),
         child: Text(
           text,
@@ -286,15 +271,24 @@ class TradingPage extends StatelessWidget {
         color: AppColors.white,
         borderRadius: BorderRadius.circular(10.r),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4),
+          BoxShadow(
+            color: AppColors.black.withValues(alpha: 0.04),
+            blurRadius: 4,
+          ),
         ],
       ),
       child: TextField(
         onChanged: (value) {
           context.read<TradingBloc>().add(SearchQueryChanged(value));
         },
+        style: TextStyle(
+          color: AppColors.black,
+          fontSize: 14.sp,
+          fontWeight: FontStyles.regular,
+          fontFamily: FontFamily.roboto,
+        ),
         decoration: InputDecoration(
-          hintText: 'Search Nse Futures',
+          hintText: AppStrings.searchNseFutures,
           hintStyle: TextStyle(
             color: AppColors.textLight,
             fontSize: 14.sp,
@@ -317,7 +311,7 @@ class TradingPage extends StatelessWidget {
       if (state.assets.isEmpty) {
         return Center(
           child: Text(
-            'No Data found',
+            AppStrings.noDataFound,
             style: TextStyle(
               fontSize: 14.sp,
               color: AppColors.textGrey,
@@ -360,7 +354,7 @@ class TradingPage extends StatelessWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        systemNavigationBarColor: Color(0xFF6768E1),
+        systemNavigationBarColor: AppColors.systemNavigationBar,
         systemNavigationBarIconBrightness: Brightness.light,
         systemNavigationBarDividerColor: Colors.transparent,
       ),
@@ -370,7 +364,7 @@ class TradingPage extends StatelessWidget {
           index: selectedBottomNav,
           height: 88,
           backgroundColor: Colors.transparent,
-          color: const Color(0xFF6768E1),
+          color: AppColors.systemNavigationBar,
           gradient: AppColors.footerGradient,
           buttonBackgroundColor: Colors.transparent,
           animationDuration: const Duration(milliseconds: 520),
@@ -383,14 +377,24 @@ class TradingPage extends StatelessWidget {
           items: [
             _navItem(
               AppIcons.myFavorites,
-              'My Favorites',
+              AppStrings.myFavorites,
               0,
               selectedBottomNav,
             ),
-            _navItem(AppIcons.order, 'Order', 1, selectedBottomNav),
-            _navItem(AppIcons.order, 'Watchlist', 2, selectedBottomNav),
-            _navItem(AppIcons.positions, 'Positions', 3, selectedBottomNav),
-            _navItem(AppIcons.wallet, 'Wallet', 4, selectedBottomNav),
+            _navItem(AppIcons.order, AppStrings.order, 1, selectedBottomNav),
+            _navItem(
+              AppIcons.order,
+              AppStrings.watchlist,
+              2,
+              selectedBottomNav,
+            ),
+            _navItem(
+              AppIcons.positions,
+              AppStrings.positions,
+              3,
+              selectedBottomNav,
+            ),
+            _navItem(AppIcons.wallet, AppStrings.wallet, 4, selectedBottomNav),
           ],
         ),
       ),
@@ -412,15 +416,7 @@ class TradingPage extends StatelessWidget {
               width: 50,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF436EDD),
-                    Color(0xFFAF7CE3),
-                    Color(0xFFAF69C7),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                gradient: AppColors.accentGradient,
               ),
             )
           : Column(
@@ -431,7 +427,7 @@ class TradingPage extends StatelessWidget {
                   height: 20,
                   width: 20,
                   colorFilter: const ColorFilter.mode(
-                    Colors.white70,
+                    AppColors.white70,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -439,7 +435,7 @@ class TradingPage extends StatelessWidget {
             ),
       label: label,
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : Colors.white70,
+        color: isSelected ? AppColors.white : AppColors.white70,
         fontSize: 12,
         fontWeight: FontWeight.w500,
         fontFamily: FontFamily.poppins,
