@@ -335,7 +335,7 @@ class TradingPage extends StatelessWidget {
                 asset: asset,
                 bottomMargin: 0,
                 onTap: () {
-                  /// hand on click
+                  context.read<TradingBloc>().add(SelectAsset(asset.symbol));
                 },
               ),
               if (index != state.assets.length - 1)
@@ -343,6 +343,32 @@ class TradingPage extends StatelessWidget {
             ],
           );
         },
+      );
+    }
+
+    if (state is TradingError) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              AppStrings.unableToLoadData,
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: AppColors.textGrey,
+                fontWeight: FontStyles.semiBold,
+                fontFamily: FontFamily.roboto,
+              ),
+            ),
+            SizedBox(height: 10.h),
+            ElevatedButton(
+              onPressed: () {
+                context.read<TradingBloc>().add(StartTrading());
+              },
+              child: const Text(AppStrings.retry),
+            ),
+          ],
+        ),
       );
     }
 
@@ -371,7 +397,7 @@ class TradingPage extends StatelessWidget {
           buttonBackgroundColor: Colors.transparent,
           animationDuration: const Duration(milliseconds: 520),
           animationCurve: Curves.easeInOutCubicEmphasized,
-          iconPadding: Platform.isIOS?10: 0,
+          iconPadding: Platform.isIOS ? 10 : 0,
           maxWidth: double.infinity,
           onTap: (index) {
             context.read<TradingBloc>().add(BottomNavChanged(index));
@@ -385,7 +411,7 @@ class TradingPage extends StatelessWidget {
             ),
             _navItem(AppIcons.order, AppStrings.order, 1, selectedBottomNav),
             _navItem(
-              AppIcons.order,
+              AppIcons.myFavorites,
               AppStrings.watchlist,
               2,
               selectedBottomNav,

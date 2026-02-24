@@ -19,6 +19,15 @@ class PricesUpdated extends TradingEvent {
   List<Object> get props => [assets];
 }
 
+class PriceStreamFailed extends TradingEvent {
+  final String message;
+
+  const PriceStreamFailed(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class SelectAsset extends TradingEvent {
   final String symbol;
 

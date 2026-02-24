@@ -21,13 +21,17 @@ class TradingBloc extends Bloc<TradingEvent, TradingState> {
       await _subscription?.cancel();
       _subscription = getPriceUpdates().listen(
         (assets) => add(PricesUpdated(assets)),
-        onError: (error) => addError(error),
+        onError: (error) => add(PriceStreamFailed(error.toString())),
       );
     });
 
     on<PricesUpdated>((event, emit) {
       _allAssets = event.assets;
       _emitLoaded(emit);
+    });
+
+    on<PriceStreamFailed>((event, emit) {
+      emit(TradingError(event.message));
     });
 
     on<SelectAsset>((event, emit) {

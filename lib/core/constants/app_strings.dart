@@ -16,6 +16,8 @@ class AppStrings {
 
   static const searchNseFutures = 'Search Nse Futures';
   static const noDataFound = 'No Data found';
+  static const unableToLoadData = 'Unable to load market data';
+  static const retry = 'Retry';
 
   static const myFavorites = 'My Favorites';
   static const order = 'Order';
