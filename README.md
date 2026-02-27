@@ -1,4 +1,4 @@
-# Trading App (Flutter Tech Assignment - Round 2)
+# Trading App (Flutter)
 
 A production-style Flutter trading demo focused on frontend market simulation, architecture quality, and scalable code organization.
 
